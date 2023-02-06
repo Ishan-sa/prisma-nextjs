@@ -1,10 +1,7 @@
-import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Cagliostro } from "@next/font/google";
 
-export default function SubmitForm({ handleSubmit }) {
-  const router = useRouter();
+export default function SubmitForm({ onSubmit = () => {} }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -13,29 +10,24 @@ export default function SubmitForm({ handleSubmit }) {
       <div>
         <h1 style={{ textAlign: "center" }}>Home</h1>
         <form
+          onSubmit={onSubmit}
           style={{
             display: "flex",
             flexDirection: "column",
-            padding: "1rem",
-            maxWidth: "500px",
-            gap: "1rem",
+            maxWidth: "400px",
           }}
-          onSubmit={handleSubmit}
-          method="POST"
         >
           <input
             type="text"
-            name=""
-            id=""
-            value={title}
             placeholder="Title"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
           <textarea
             value={content}
+            placeholder="Post"
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Content"
-          ></textarea>
+          />
           <button type="submit">Submit</button>
         </form>
       </div>

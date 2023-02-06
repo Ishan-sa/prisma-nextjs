@@ -8,3 +8,22 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.card-cont {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1rem;
+  padding: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .card-cont {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .card-cont {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
