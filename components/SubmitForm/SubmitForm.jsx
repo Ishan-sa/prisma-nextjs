@@ -21,6 +21,7 @@ export default function SubmitForm({ handleSubmit }) {
             gap: "1rem",
           }}
           onSubmit={handleSubmit}
+          method="POST"
         >
           <input
             type="text"

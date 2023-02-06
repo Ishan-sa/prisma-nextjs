@@ -1,44 +1,56 @@
-import styles from "@/styles/Home.module.css";
-import { useState, useEffect } from "react";
-import SubmitForm from "components/SubmitForm/SubmitForm";
-import axios from "axios";
+import styles from "../styles/Home.module.css";
 import { prisma } from "../../server/db/client";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Home({ posts }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  // const [posts, setPosts] = useState([]);
+  const [newPosts, setNewPosts] = useState(posts);
 
-  // useEffect(() => {
-  //   setPosts(...posts);
-  // }, []);
-
-  let newPosts = { ...posts };
   useEffect(() => {
-    console.log(newPosts);
-  });
+    setNewPosts(posts);
+  }, [posts]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await axios.post("/api/posts", { title, content });
-    // setPosts([...posts, res.data])
-    console.log(res.data);
+    setNewPosts([...newPosts, res.data]);
   };
 
   return (
-    <>
-      <main className={styles.main}>
-        <SubmitForm handleSubmit={handleSubmit} />
-        {/* {posts.map((post) => {
-          return (
-            <div key={post.id}>
-              <h2>{post.title}</h2>
-              <p>{post.content}</p>
-            </div>
-          );
-        })} */}
-      </main>
-    </>
+    <main className={styles.main}>
+      <div>
+        <h1 className="text-2xl">Home</h1>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            maxWidth: "400px",
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <textarea
+            value={content}
+            placeholder="Post"
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <button type="submit">Submit</button>
+        </form>
+        {newPosts.map((post) => (
+          <div key={post.id}>
+            <h2>{post.title}</h2>
+            <p>{post.content}</p>
+          </div>
+        ))}
+      </div>
+    </main>
   );
 }
 
