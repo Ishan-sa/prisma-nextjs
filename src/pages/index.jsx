@@ -1,8 +1,8 @@
-import styles from "../styles/Home.module.css";
 import { prisma } from "../../server/db/client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import SubmitForm from "components/SubmitForm/SubmitForm";
+import Card from "components/Card/Card";
+import Button from "components/Button/Button";
 
 export default function Home({ posts }) {
   const [title, setTitle] = useState("");
@@ -43,24 +43,11 @@ export default function Home({ posts }) {
           placeholder="Content"
           onChange={(e) => setContent(e.target.value)}
         />
-        <button
-          type="submit"
-          className="px-2 py-2 bg-blue-500 rounded-lg text-white"
-        >
-          Submit
-        </button>
+        <Button text="Submit" type="submit" />
       </form>
       <div className="card-cont">
         {newPosts.map((post) => (
-          <div
-            key={post.id}
-            className="flex flex-col max-w-md mx-auto justify-center items-start bg-gray-200 px-4 py-2 rounded-lg w-full"
-          >
-            <h2 className="text-xl text-[#182232] font-semibold">
-              {post.title}
-            </h2>
-            <p>{post.content}</p>
-          </div>
+          <Card key={post.id} title={post.title} content={post.content} />
         ))}
       </div>
     </div>
@@ -68,7 +55,11 @@ export default function Home({ posts }) {
 }
 
 export async function getServerSideProps() {
-  const posts = await prisma.post.findMany();
+  const posts = await prisma.post.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   return {
     props: {
